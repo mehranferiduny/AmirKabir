@@ -12,7 +12,10 @@ router.get('/usus',users);
 //! add product
 router.post('/product',product.prodectAdd)
 //! get singel product
-router.get('/product/:id',product.getsingelProduct)
+router.get('/product/:id',product.getsingelProduct);
+// !patch edit product
+router.patch('/product/:id',product.editProduct);
+
 //!get Product
 router.get('/products',product.getProduct)
 

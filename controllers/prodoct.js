@@ -2,6 +2,7 @@ const Post=require('../model/prodoct');
 const sharp = require("sharp");
 const shortId = require("shortid");
 const appRoot = require("app-root-path");
+const fs=require("fs");
 
 
 exports.prodectAdd=async (req,res,next)=>{
@@ -100,3 +101,87 @@ exports.getsingelProduct=async(req,res,next)=>{
     next(err);
   }
 }
+
+exports.editProduct = async (req, res, next) => {
+  const thumbnail = req.files ? req.files.thumbnail : {};
+  const fileName = `${shortId.generate()}_${thumbnail.name}`;
+  const uploadPath = `${appRoot}/public/uploads/prodec/thumbnails/${fileName}`;
+   
+  const fileNameimage = [];
+  const image = req.files ? req.files.image : {};
+  if(image)
+      fileNameimage.push(`${shortId.generate()}_${image.name}`); 
+  const uploadPathimage = `${appRoot}/public/uploads/prodec/image/${fileNameimage}`;
+
+  const post = await Post.findOne({ _id: req.params.id });
+
+  try {
+      if (thumbnail != {}){
+          await Post.proValidation({ ...req.body, thumbnail });
+      }else{
+        await Post.proValidation({
+          ...req.body,
+          thumbnail: {
+              name: "placeholder",
+              size: 0,
+              mimetype: "image/jpeg",
+          },
+      });
+       }
+
+
+
+
+
+       
+      if (!post) {
+          const error = new Error("محصول با این شناسه یافت نشد");
+          error.statusCode = 404;
+          throw error;
+      }
+
+          if (thumbnail.name) {
+              fs.unlink(
+                  `${appRoot}/public/uploads/thumbnails/${post.thumbnail}`,
+                  async (err) => {
+                      if (err) console.log(err);
+                      else {
+                          await sharp(thumbnail.data)
+                              .jpeg({ quality: 80 })
+                              .toFile(uploadPath)
+                              .catch((err) => console.log(err));
+                      }
+                  }
+              );
+          
+              if (image) {
+                fs.unlink(
+                    `${appRoot}/public/uploads/thumbnails/${post.image}`,
+                    async (err) => {
+                        if (err) console.log(err);
+                        else {
+                            await sharp(image.data)
+                                .jpeg({ quality: 80 })
+                                .toFile(uploadPathimage)
+                                .catch((err) => console.log(err));
+                        }
+                    }
+                );
+              }
+
+          const { title,body,price } = req.body;
+          post.title = title;
+          post.body = body;
+          post.price = price;
+          post.thumbnail = thumbnail.name ? fileName : post.thumbnail;
+          if(image){
+          post.image = image.name ? fileNameimage : post.image;
+          }
+          await post.save();
+
+          res.status(200).json({ message: "محصول شما با موفقیت ویرایش شد" });
+      }
+  } catch (err) {
+      next(err);
+  }
+};
