@@ -79,3 +79,24 @@ exports.getProduct=async(req,res,next)=>{
     next(err);
   }
 }
+
+exports.getsingelProduct=async(req,res,next)=>{
+  try {
+      
+    const post=await Post.findOne({_id : req.params.id});
+
+    if(!post){
+      const error = new Error(
+        "بلاگی موجود نمی باشد"
+    );
+    error.statusCode = 422;
+    throw error;
+    }else{
+      res.status(201).json({post,message:"بلاگ با موفیقت دریافت  شد"});
+    }
+    
+
+  } catch (err) {
+    next(err);
+  }
+}

@@ -11,6 +11,8 @@ router.get('/usus',users);
 
 //! add product
 router.post('/product',product.prodectAdd)
+//! get singel product
+router.get('/product/:id',product.getsingelProduct)
 //!get Product
 router.get('/products',product.getProduct)
 
