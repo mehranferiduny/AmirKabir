@@ -15,6 +15,7 @@ remove blog:  http://localhost:5000/admin/deleteblog/:id  *DELETE paramas
 
 
 
-//! Add product
+//!  product
 
-add product :  http://localhost:5000/user/product *POST  {title,body,price,thumbnail,cat,[image]}
+add product :  http://localhost:5000/user/product *POST  {title,body,price,thumbnail,cat,[image]};
+get products :http://localhost:5000/user/products *GET {title,body,price,thumbnail,cat,[image]}

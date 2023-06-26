@@ -59,3 +59,23 @@ throw error; });
      
 
 }
+
+exports.getProduct=async(req,res,next)=>{
+  try {
+
+    const post=await Post.find({}).sort('asc');
+    if(!post){
+      const error = new Error(
+        "محصولی موجود نمی باشد"
+    );
+    error.statusCode = 422;
+    throw error;
+    }else{
+      res.status(201).json({post,message:"محصول با موفیقت دریافت  شد"});
+    }
+    
+
+  } catch (err) {
+    next(err);
+  }
+}
