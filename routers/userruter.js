@@ -15,6 +15,8 @@ router.post('/product',product.prodectAdd)
 router.get('/product/:id',product.getsingelProduct);
 // !patch edit product
 router.patch('/product/:id',product.editProduct);
+// ! delet sigel product
+router.delete('/product/:id',product.deleteProduct);
 
 //!get Product
 router.get('/products',product.getProduct)

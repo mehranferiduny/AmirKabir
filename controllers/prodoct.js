@@ -185,3 +185,40 @@ exports.editProduct = async (req, res, next) => {
       next(err);
   }
 };
+
+exports.deleteProduct = async (req, res, next) => {
+  try {
+      const post = await Post.findByIdAndRemove(req.params.id);
+      let filePathimage=[];
+      if(post.image){
+         filePathimage = `${appRoot}/public/uploads/prodec/image/${post.image}`;
+      }
+      const filePath = `${appRoot}/public/uploads/prodec/thumbnails/${post.thumbnail}`;
+
+      fs.unlink(filePath, (err) => {
+         if(post.image){
+
+          fs.unlink(filePathimage,(err)=>{
+            if (err) {
+              const error = new Error(
+                  "خطای در پاکسازی عکس های پست مربوطه رخ داده است"
+              );
+              error.statusCode = 400;
+              throw error;
+          }
+          })
+         }
+          if (err) {
+              const error = new Error(
+                  "خطای در پاکسازی عکس پست مربوطه رخ داده است"
+              );
+              error.statusCode = 400;
+              throw error;
+          } else {
+              res.status(200).json({ message: "پست شما با موفقیت پاک شد" });
+          }
+      });
+  } catch (err) {
+      next(err);
+  }
+};
