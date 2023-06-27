@@ -12,9 +12,13 @@ exports.prodectAdd=async (req,res,next)=>{
    
   const fileNameimage = [];
   const image = req.files ? req.files.image : {};
+  
   if(image)
-      fileNameimage.push(`${shortId.generate()}_${image.name}`); 
+      for(let i=0 ; i<image.length ; i++){
+      fileNameimage.push(`${shortId.generate()}_${image[i].name}`); 
+    }
   const uploadPathimage = `${appRoot}/public/uploads/prodec/image/${fileNameimage}`;
+
     
   try {
     
@@ -33,6 +37,7 @@ exports.prodectAdd=async (req,res,next)=>{
   throw error; });
 
    if(image){
+    if(image.name){
   await sharp(image.data)
   .jpeg({ quality: 80 })
   .toFile(uploadPathimage)
@@ -44,6 +49,7 @@ error.statusCode = 422;
 throw error; });
 
     }
+  }
 
 
      await Post.create({
