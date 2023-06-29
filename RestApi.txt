@@ -23,3 +23,9 @@ get singel products : http://localhost:5000/user/product/:id *GET {title,body,pr
 patch edit products : http://localhost:5000/user/product/:id *PATCH {title,body,price,thumbnail,cat,[image]}
 delete singel producet : http://localhost:5000/user/product/:id *DELETE parames
 
+
+
+//! callus
+
+add callus :http://localhost:5000/user/callus *POST {name,body,filez,smedia,phone}
+
