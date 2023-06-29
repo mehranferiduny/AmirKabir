@@ -17,4 +17,8 @@ router.get('/getblog',con.getBlog);
 router.get('/getblog/:id',con.getsingelBlog);
 
 
+router.get('/getcallus',con.getcallus);
+router.get('/getcallus/:id',con.getsingelCall);
+
+
 module.exports = router;

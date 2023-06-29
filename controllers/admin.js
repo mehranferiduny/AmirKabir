@@ -9,6 +9,7 @@ const appRoot = require("app-root-path");
 
 const Cat=require('../model/cat');
 const Blog=require('../model/blog');
+const Call=require('../model/callus');
 
 
 exports.setCat=async(req,res,next)=>{
@@ -219,3 +220,44 @@ exports.deleteBlog = async (req, res, next) => {
       next(err);
   }
 };
+
+exports.getcallus=async(req,res,next)=>{
+  try {
+
+    const call=await Call.find({}).sort('asc');
+    if(!call){
+      const error = new Error(
+        "درخواستی موجود نمی باشد"
+    );
+    error.statusCode = 422;
+    throw error;
+    }else{
+      res.status(201).json({call,message:"درخواست با موفیقت دریافت شد"});
+    }
+    
+
+  } catch (err) {
+    next(err);
+  }
+}
+
+exports.getsingelCall=async(req,res,next)=>{
+  try {
+      
+    const call=await Call.findOne({_id : req.params.id});
+
+    if(!call){
+      const error = new Error(
+        "درخواستی موجود نمی باشد"
+    );
+    error.statusCode = 422;
+    throw error;
+    }else{
+      res.status(201).json({call,message:"درخواست با موفیقت دریافت  شد"});
+    }
+    
+
+  } catch (err) {
+    next(err);
+  }
+}

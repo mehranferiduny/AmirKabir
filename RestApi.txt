@@ -27,5 +27,7 @@ delete singel producet : http://localhost:5000/user/product/:id *DELETE parames
 
 //! callus
 
-add callus :http://localhost:5000/user/callus *POST {name,body,filez,smedia,phone}
+add callus : http://localhost:5000/user/callus *POST {name,body,filez,smedia,phone}
+get callus : http://localhost:5000/admin/getcallus *GET 
+get singel callus : http://localhost:5000/admin/getcallus/:id *GET paramas
 
