@@ -4,14 +4,14 @@ mehram
 کار داشبورد در حال اتمام است
 
 
-get cat:   http://localhost:5000/admin/getCat  *GET
-set cat:  http://localhost:5000/admin/setCat  *POST
-delete cat: http://localhost:5000/admin/deletecat/:id  *DELETE paramas
-set blog:  http://localhost:5000/admin/sendblog  *POST
-get blog:  http://localhost:5000/admin/getblog  *GET All{_id * title * des * thumbnail * cat * createdAt}
-getsingl blog:  http://localhost:5000/admin/getblog/:id  *GET Singel{_id * title * des * thumbnail * cat * createdAt}
-edit blog:  http://localhost:5000/admin/editblog/:id  *PATCH Singel{ title * des * thumbnail * }
-remove blog:  http://localhost:5000/admin/deleteblog/:id  *DELETE paramas
+get cat:   http://localhost:5000/getCat  *GET
+set cat:  http://localhost:5000/admin/setCat  *POST  -authenticated
+delete cat: http://localhost:5000/admin/deletecat/:id  *DELETE paramas  -authenticated
+set blog:  http://localhost:5000/admin/sendblog  *POST   -authenticated
+get blog:  http://localhost:5000/getblog  *GET All{_id * title * des * thumbnail * cat * createdAt}
+getsingl blog:  http://localhost:5000/getblog/:id  *GET Singel{_id * title * des * thumbnail * cat * createdAt}
+edit blog:  http://localhost:5000/admin/editblog/:id  *PATCH Singel{ title * des * thumbnail * }   -authenticated
+remove blog:  http://localhost:5000/admin/deleteblog/:id  *DELETE paramas  -authenticated
 
 
 
@@ -31,3 +31,6 @@ add callus : http://localhost:5000/user/callus *POST {name,body,filez,smedia,pho
 get callus : http://localhost:5000/admin/getcallus *GET 
 get singel callus : http://localhost:5000/admin/getcallus/:id *GET paramas
 
+//! Admin
+add admin http://localhost:5000/admin/addadmin *POST {username,password}; -authenticated
+login admin http://localhost:5000/admin/loginadmin *POST {username,password};

@@ -4,12 +4,15 @@ const fs=require('fs');
 const sharp = require("sharp");
 const shortId = require("shortid");
 const appRoot = require("app-root-path");
+const bcrypt=require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 
 
 const Cat=require('../model/cat');
 const Blog=require('../model/blog');
 const Call=require('../model/callus');
+const Admin=require('../model/Admin');
 
 
 exports.setCat=async(req,res,next)=>{
@@ -261,3 +264,59 @@ exports.getsingelCall=async(req,res,next)=>{
     next(err);
   }
 }
+
+exports.createAdmin = async (req, res, next) => {
+  try {
+
+      const { username, password  } = req.body;
+
+      const user = await Admin.findOne({ username });
+      if (user) {
+          const error = new Error(
+              "کاربری با این ایمیل در پایگاه داده موجود است"
+          );
+          error.statusCode = 422;
+          throw error;
+      } else {
+          await Admin.create({ username, password });
+          res.status(201).json({ message: "عضویت موفقیت آمیز بود" });
+      }
+  } catch (err) {
+      next(err);
+  }
+};
+
+exports.handleLoginadmin = async (req, res, next) => {
+  const { username, password } = req.body;
+
+  try {
+      const user = await Admin.findOne({ username });
+      if (!user) {
+          const error = new Error("کاربری با این ایمیل یافت نشد");
+          error.statusCode = 404;
+          throw error;
+      }
+
+      const isEqual = await bcrypt.compare(password, user.password);
+
+      if (isEqual) {
+          const token = jwt.sign(
+              {
+                  user: {
+                      userId: user._id.toString(),
+                      username: user.username,
+                  },
+              },
+              process.env.JWT_SECRET
+          );
+         
+          res.status(200).json({ token, userId: user._id.toString() });
+      } else {
+          const error = new Error("نام کاربری یا کلمه عبور اشتباه است");
+          error.statusCode = 422;
+          throw error;
+      }
+  } catch (err) {
+      next(err);
+  }
+};
